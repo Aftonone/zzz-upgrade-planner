@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inter-Knot Upgrade Planner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">✦</span><span>Inter-Knot <b>Planner</b></span></a>
+    <div class="topbar-actions">
+      <label class="profile-picker">Saved build
+        <select id="profileSelect"><option value="">No saved builds</option></select>
+      </label>
+      <button class="button button-ghost" id="saveButton">Save build</button>
+      <button class="button button-primary" id="resetButton">Reset</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ZENLESS ZONE ZERO · RESOURCE PLANNER</p>
+        <h1 id="buildTitle">Upgrade Planner</h1>
+        <p class="hero-copy">Enter your current and target levels to calculate the materials and farming time needed for your build.</p>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="planner-column">
+        <article class="card section-card">
+          <div class="section-heading"><div><span class="section-number">01</span><h2>Agent level</h2></div></div>
+          <p class="muted">Character level EXP and certification seals are calculated separately.</p>
+          <div class="level-row">
+            <label>Current level <input id="agentCurrent" type="number" min="1" max="60" value="1"></label>
+            <span class="arrow">→</span>
+            <label>Target level <input id="agentTarget" type="number" min="1" max="60" value="60"></label>
+          </div>
+        </article>
+
+        <article class="card section-card">
+          <div class="section-heading"><div><span class="section-number">02</span><h2>Skills</h2></div><span class="tag tag-blue">COMBAT SKILLS</span></div>
+          <p class="muted">Set each skill’s current and target level. Level 12 requires a Hamster Cage.</p>
+          <div class="skill-grid" id="skillGrid"></div>
+        </article>
+
+        <article class="card section-card">
+          <div class="section-heading"><div><span class="section-number">03</span><h2>Core Skills</h2></div><span class="tag tag-yellow">A — F</span></div>
+          <p class="muted">Core nodes unlock in order. Choose the last node you want to complete.</p>
+          <div class="core-picker">
+            <div class="core-picker-status"><span>Level through</span><strong id="coreTargetLabel">Skip</strong></div>
+            <input id="coreTarget" class="core-slider" type="range" min="0" max="6" value="0" step="1" aria-label="Core skill level target">
+            <div class="core-stops" aria-hidden="true">
+              <span>Skip</span><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card section-card">
+          <div class="section-heading"><div><span class="section-number">04</span><h2>W-Engine</h2></div><label class="switch-label"><input id="engineEnabled" type="checkbox" checked><span class="switch"></span> Include</label></div>
+          <p class="muted">W-Engines start at level 0. Turn this off when yours is already complete.</p>
+          <div class="level-row">
+            <label>Current level <input id="engineCurrent" type="number" min="0" max="60" value="0"></label>
+            <span class="arrow">→</span>
+            <label>Target level <input id="engineTarget" type="number" min="0" max="60" value="60"></label>
+          </div>
+        </article>
+
+        <article class="card section-card">
+          <div class="section-heading"><div><span class="section-number">05</span><h2>Disk Level</h2></div><span class="tag tag-purple">VARIABLE</span></div>
+          <p class="muted">Each disk is calculated from level 1 to level 15. Add extra disks to account for RNG.</p>
+          <div class="level-row">
+            <label>Disks to level <input id="diskCount" type="number" min="0" max="99" value="6"></label>
+            <span class="arrow">×</span>
+            <div class="disk-max-note"><strong>1 → 15</strong><span>per disk</span></div>
+          </div>
+        </article>
+      </div>
+
+      <aside class="summary-column">
+        <div class="card energy-card">
+          <div class="summary-top"><div><p class="eyebrow">FARMING TIMELINE</p><h2>Estimated time</h2></div><span class="live-dot">320 / DAY</span></div>
+          <div class="energy-days"><strong id="daysEstimate">0–0 days</strong><span id="energyEstimate">0–0 energy</span></div>
+          <p class="energy-note" id="energyNote">Dennies are excluded from the timeline. Estimate is based on material farming and weekly S-rank core rewards.</p>
+        </div>
+        <div class="card summary-card">
+          <div class="summary-top"><div><p class="eyebrow">YOUR SHOPPING LIST</p><h2>Materials needed</h2></div><span class="live-dot">LIVE</span></div>
+          <div class="denny-total"><span>Dennies</span><strong id="dennyTotal">0</strong></div>
+          <div class="material-list" id="materialList"></div>
+          <div class="empty-state" id="emptyState">Set a target above to see your materials.</div>
+        </div>
+        <div class="card notes-card"><h3>Planner notes</h3><ul><li>Counts are rounded up to whole materials.</li><li>Ascension materials are included at each required threshold.</li><li>Saved builds stay in this browser only.</li></ul></div>
+      </aside>
+    </section>
+  </main>
+  <div class="save-dialog-backdrop" id="saveDialog" hidden>
+    <form class="save-dialog card" id="saveForm">
+      <div class="summary-top"><div><p class="eyebrow">SAVE BUILD</p><h2>Choose a character</h2></div><button class="dialog-close" id="cancelSaveButton" type="button" aria-label="Close save dialog">×</button></div>
+      <p class="muted">Save this upgrade plan so you can return to it later.</p>
+      <label class="dialog-label" for="characterName">Character name</label>
+      <input id="characterName" class="dialog-input" type="text" maxlength="40" placeholder="e.g. Miyabi" autocomplete="off" required>
+      <div class="dialog-actions"><button class="button button-ghost" id="cancelSaveButtonSecondary" type="button">Cancel</button><button class="button button-primary" type="submit">Save character</button></div>
+    </form>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
