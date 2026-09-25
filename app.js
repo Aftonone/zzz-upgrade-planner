@@ -80,6 +80,27 @@ function loadState(s) { Object.entries(s).forEach(([key,value])=>{ if(key === 's
 function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 function updateBuildTitle(name=''){ $('buildTitle').textContent = name ? `${name} Upgrade Plan` : 'Upgrade planner'; }
 skills.forEach((name,i)=>$('skillGrid').insertAdjacentHTML('beforeend',`<div class="skill-item"><span>${name}</span><div class="skill-levels"><label>Current<input class="skill-current" type="number" min="1" max="12" value="1" aria-label="${name} current level"></label><label>Target<input class="skill-target" type="number" min="1" max="12" value="12" aria-label="${name} target level"></label></div></div>`));
+function enhanceNumberInputs() {
+  document.querySelectorAll('input[type="number"]:not([data-spinner-ready])').forEach(input => {
+    input.dataset.spinnerReady = 'true';
+    const wrapper = document.createElement('span');
+    wrapper.className = 'number-control';
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+    const buttons = document.createElement('span');
+    buttons.className = 'number-buttons';
+    buttons.innerHTML = '<button type="button" data-step="up" aria-label="Increase value">+</button><button type="button" data-step="down" aria-label="Decrease value">−</button>';
+    wrapper.appendChild(buttons);
+    buttons.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      const min = Number(input.min || 0), max = Number(input.max || 999), step = Number(input.step || 1);
+      input.value = Math.max(min, Math.min(max, Number(input.value || min) + (button.dataset.step === 'up' ? step : -step)));
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
+}
+enhanceNumberInputs();
 function updateCoreSlider() { const value = +$('coreTarget').value; $('coreTargetLabel').textContent = value === 0 ? 'Skip' : `Through ${'ABCDEF'[value - 1]}`; $('coreTarget').style.setProperty('--core-progress', `${(value / 6) * 100}%`); }
 updateCoreSlider();
 document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',calculate)); $('engineEnabled').addEventListener('change',calculate);
