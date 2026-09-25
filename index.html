@@ -21,14 +21,6 @@
   </header>
 
   <main class="shell">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">ZENLESS ZONE ZERO · RESOURCE PLANNER</p>
-        <h1 id="buildTitle">Upgrade Planner</h1>
-        <p class="hero-copy">Enter your current and target levels to calculate the materials and farming time needed for your build.</p>
-      </div>
-    </section>
-
     <section class="workspace">
       <div class="planner-column">
         <article class="card section-card">
@@ -42,13 +34,13 @@
         </article>
 
         <article class="card section-card">
-          <div class="section-heading"><div><span class="section-number">02</span><h2>Skills</h2></div><span class="tag tag-blue">COMBAT SKILLS</span></div>
+          <div class="section-heading"><div><span class="section-number">02</span><h2>Skills</h2></div></div>
           <p class="muted">Set each skill’s current and target level. Level 12 requires a Hamster Cage.</p>
           <div class="skill-grid" id="skillGrid"></div>
         </article>
 
         <article class="card section-card">
-          <div class="section-heading"><div><span class="section-number">03</span><h2>Core Skills</h2></div><span class="tag tag-yellow">A — F</span></div>
+          <div class="section-heading"><div><span class="section-number">03</span><img class="section-icon" src="./assets/icons/Icon_Core_Skill.webp" alt=""><h2>Core Skills</h2></div></div>
           <p class="muted">Core nodes unlock in order. Choose the last node you want to complete.</p>
           <div class="core-picker">
             <div class="core-picker-status"><span>Level through</span><strong id="coreTargetLabel">Skip</strong></div>
@@ -70,7 +62,7 @@
         </article>
 
         <article class="card section-card">
-          <div class="section-heading"><div><span class="section-number">05</span><h2>Disk Level</h2></div><span class="tag tag-purple">VARIABLE</span></div>
+          <div class="section-heading"><div><span class="section-number">05</span><h2>Disk Level</h2></div></div>
           <p class="muted">Each disk is calculated from level 1 to level 15. Add extra disks to account for RNG.</p>
           <div class="level-row">
             <label>Disks to level <input id="diskCount" type="number" min="0" max="99" value="6"></label>
@@ -84,11 +76,11 @@
         <div class="card energy-card">
           <div class="summary-top"><div><p class="eyebrow">FARMING TIMELINE</p><h2>Estimated time</h2></div><span class="live-dot">320 / DAY</span></div>
           <div class="energy-days"><strong id="daysEstimate">0–0 days</strong><span id="energyEstimate">0–0 energy</span></div>
-          <p class="energy-note" id="energyNote">Dennies are excluded from the timeline. Estimate is based on material farming and weekly S-rank core rewards.</p>
+          <p class="energy-note" id="energyNote">Dennys are excluded from the timeline. Estimate is based on material farming and weekly S-rank core rewards.</p>
         </div>
         <div class="card summary-card">
           <div class="summary-top"><div><p class="eyebrow">LIST</p><h2>Materials Needed</h2></div><span class="live-dot">LIVE</span></div>
-          <div class="denny-total"><span>Dennies</span><strong id="dennyTotal">0</strong></div>
+          <div class="denny-total"><span class="denny-label"><img class="denny-icon" src="./assets/materials/Item_Denny.webp" alt="">Dennys</span><strong id="dennyTotal">0</strong></div>
           <div class="material-list" id="materialList"></div>
           <div class="empty-state" id="emptyState">Set a target above to see your materials.</div>
         </div>
@@ -96,6 +88,7 @@
       </aside>
     </section>
   </main>
+  <footer class="site-footer"><span>This is an open-source, fan-made, non-commercial project. Copyright for the icons and system:</span><span>© All rights reserved by miHoYo. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Zenless Zone Zero belong to their respective owners.</span></footer>
   <div class="save-dialog-backdrop" id="saveDialog" hidden>
     <form class="save-dialog card" id="saveForm">
       <div class="summary-top"><div><p class="eyebrow">SAVE BUILD</p><h2>Choose a character</h2></div><button class="dialog-close" id="cancelSaveButton" type="button" aria-label="Close save dialog">×</button></div>

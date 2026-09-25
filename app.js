@@ -1,14 +1,20 @@
 const $ = (id) => document.getElementById(id);
 const materialLabels = {
-  cLog: ['Trainee Investigator Log', 'C', 'rank-c'], bLog: ['Official Investigator Log', 'B', 'rank-b'], aLog: ['Senior Investigator Log', 'A', 'rank-a'],
-  cSeal: ['Basic Certification Seal', 'C', 'rank-c'], bSeal: ['Advanced Certification Seal', 'B', 'rank-b'], aSeal: ['Specialized Certification Seal', 'A', 'rank-a'],
-  cChip: ['Basic Chip', 'C', 'rank-c'], bChip: ['Advanced Chip', 'B', 'rank-b'], aChip: ['Specialized Chip', 'A', 'rank-a'],
-  coreA: ['Higher Dimensional Data', 'A', 'rank-a'], coreS: ['Notorious Hunt Material', 'S', 'rank-special'], cage: ['Hamster Cage', '◆', 'rank-special'],
-  cBattery: ['W-Engine Battery', 'C', 'rank-c'], bBattery: ['W-Engine Power Supply', 'B', 'rank-b'], aBattery: ['W-Engine Energy Module', 'A', 'rank-a'],
-  cComponent: ['Basic Component', 'C', 'rank-c'], bComponent: ['Reinforced Component', 'B', 'rank-b'], aComponent: ['Specialized Component', 'A', 'rank-a'],
-  cPlating: ['Molded Plating', 'C', 'rank-c'], bPlating: ['Crystallized Plating', 'B', 'rank-b'], aPlating: ['Ether Plating', 'A', 'rank-a']
+  cLog: ['Trainee Investigator Log', 'C', 'rank-c', 'Item_Trainee_Investigator_Log.webp'], bLog: ['Official Investigator Log', 'B', 'rank-b', 'Item_Official_Investigator_Log.webp'], aLog: ['Senior Investigator Log', 'A', 'rank-a', 'Item_Senior_Investigator_Log.webp'],
+  cSeal: ['Basic Certification Seal', 'C', 'rank-c', 'Item_Basic_Certification_Seal.webp'], bSeal: ['Advanced Certification Seal', 'B', 'rank-b', 'Item_Advanced_Certification_Seal.webp'], aSeal: ['Specialized Certification Seal', 'A', 'rank-a', 'Item_Specialized_Certification_Seal.webp'],
+  cChip: ['Basic Chip', 'C', 'rank-c', 'Item_Basic_Physical_Chip.webp'], bChip: ['Advanced Chip', 'B', 'rank-b', 'Item_Advanced_Physical_Chip.webp'], aChip: ['Specialized Chip', 'A', 'rank-a', 'Item_Specialized_Physical_Chip.webp'],
+  coreA: ['Higher Dimensional Data', 'A', 'rank-a', 'Item_Higher_Dimensional_Data.webp'], coreS: ['Notorious Hunt Material', 'S', 'rank-special', 'Item_Notorious_Hunt_Material.webp'], cage: ['Hamster Cage', '◆', 'rank-special', 'Item_Hamster_Cage_Pass.webp'],
+  cBattery: ['W-Engine Battery', 'C', 'rank-c', 'Item_W-Engine_Battery.webp'], bBattery: ['W-Engine Power Supply', 'B', 'rank-b', 'Item_W-Engine_Power_Supply.webp'], aBattery: ['W-Engine Energy Module', 'A', 'rank-a', 'Item_W-Engine_Energy_Module.webp'],
+  cComponent: ['Basic Component', 'C', 'rank-c', 'Item_Basic_Component.webp'], bComponent: ['Reinforced Component', 'B', 'rank-b', 'Item_Reinforced_Component.webp'], aComponent: ['Specialized Component', 'A', 'rank-a', 'Item_Specialized_Component.webp'],
+  cPlating: ['Molded Plating', 'C', 'rank-c', 'Item_Molded_Plating_Agent.webp'], bPlating: ['Crystallized Plating', 'B', 'rank-b', 'Item_Crystallized_Plating_Agent.webp'], aPlating: ['Ether Plating', 'A', 'rank-a', 'Item_Ether_Plating_Agent.webp']
 };
-const skills = ['Basic Attack', 'Dodge', 'Assist', 'Special Attack', 'Chain Attack'];
+const skills = [
+  {name:'Basic Attack', icon:'Icon_Basic_Attack.webp'},
+  {name:'Dodge', icon:'Icon_Dodge.webp'},
+  {name:'Assist', icon:'Icon_Assist_Attack.webp'},
+  {name:'Special Attack', icon:'Icon_Special_Attack.webp'},
+  {name:'Chain Attack', icon:'Icon_Chain_Attack.webp'}
+];
 const skillCosts = [
   {cChip:2, denny:2000},{cChip:3,denny:3000},{bChip:2,denny:6000},{bChip:3,denny:9000},{bChip:4,denny:12000},{bChip:6,denny:18000},
   {aChip:5,denny:45000},{aChip:8,denny:67500},{aChip:10,denny:90000},{aChip:12,denny:112500},{aChip:15,denny:135000,cage:1}
@@ -46,7 +52,7 @@ function calculate() {
 }
 function render(out) {
   $('dennyTotal').textContent = (out.denny || 0).toLocaleString(); const list = $('materialList'); list.innerHTML = '';
-  Object.entries(out).filter(([key,value]) => key !== 'denny' && value > 0).forEach(([key,value]) => { const item=materialLabels[key]; if(!item)return; list.insertAdjacentHTML('beforeend',`<div class="material-row"><span class="material-name"><i class="material-icon ${item[2]}">${item[1]}</i>${item[0]}</span><strong>${value.toLocaleString()}</strong></div>`); });
+  Object.entries(out).filter(([key,value]) => key !== 'denny' && value > 0).forEach(([key,value]) => { const item=materialLabels[key]; if(!item)return; list.insertAdjacentHTML('beforeend',`<div class="material-row"><span class="material-name"><img class="material-icon material-image" src="./assets/materials/${item[3]}" alt="" loading="lazy">${item[0]}</span><strong>${value.toLocaleString()}</strong></div>`); });
   $('emptyState').style.display = Object.keys(out).length === 1 ? 'block' : 'none';
 }
 function farmingRuns(out, keys, low, high) {
@@ -78,8 +84,7 @@ function renderTimeline(out) {
 function buildState() { return {agentCurrent:$('agentCurrent').value,agentTarget:$('agentTarget').value,engineEnabled:$('engineEnabled').checked,engineCurrent:$('engineCurrent').value,engineTarget:$('engineTarget').value,diskCount:$('diskCount').value,coreTarget:$('coreTarget').value,skills:[...document.querySelectorAll('.skill-item')].map(skill=>({current:skill.querySelector('.skill-current').value,target:skill.querySelector('.skill-target').value}))}; }
 function loadState(s) { Object.entries(s).forEach(([key,value])=>{ if(key === 'skills')return; const el=$(key); if(el){if(el.type==='checkbox')el.checked=value;else el.value=value;} }); s.skills?.forEach((saved,i)=>{const skill=document.querySelectorAll('.skill-item')[i];if(!skill)return;const current=typeof saved==='object'?saved.current:'1';const target=typeof saved==='object'?saved.target:saved;skill.querySelector('.skill-current').value=current;skill.querySelector('.skill-target').value=target;}); if(s.cores && s.coreTarget === undefined) $('coreTarget').value = s.cores.filter(value => value === '1').length; updateCoreSlider(); calculate(); }
 function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function updateBuildTitle(name=''){ $('buildTitle').textContent = name ? `${name} Upgrade Plan` : 'Upgrade planner'; }
-skills.forEach((name,i)=>$('skillGrid').insertAdjacentHTML('beforeend',`<div class="skill-item"><span>${name}</span><div class="skill-levels"><label>Current<input class="skill-current" type="number" min="1" max="12" value="1" aria-label="${name} current level"></label><label>Target<input class="skill-target" type="number" min="1" max="12" value="12" aria-label="${name} target level"></label></div></div>`));
+skills.forEach(skill=>$('skillGrid').insertAdjacentHTML('beforeend',`<div class="skill-item"><div class="skill-title"><img src="./assets/icons/${skill.icon}" alt=""><span>${skill.name}</span></div><div class="skill-levels"><label>Current<input class="skill-current" type="number" min="1" max="12" value="1" aria-label="${skill.name} current level"></label><label>Target<input class="skill-target" type="number" min="1" max="12" value="12" aria-label="${skill.name} target level"></label></div></div>`));
 function enhanceNumberInputs() {
   document.querySelectorAll('input[type="number"]:not([data-spinner-ready])').forEach(input => {
     input.dataset.spinnerReady = 'true';
@@ -116,6 +121,6 @@ function closeSaveDialog(){ $('saveDialog').hidden = true; $('characterName').va
 $('saveButton').addEventListener('click',()=>{ $('saveDialog').hidden = false; $('characterName').focus(); });
 ['cancelSaveButton','cancelSaveButtonSecondary'].forEach(id=>$(id).addEventListener('click',closeSaveDialog));
 $('saveDialog').addEventListener('click',event=>{if(event.target === $('saveDialog'))closeSaveDialog()});
-$('saveForm').addEventListener('submit',event=>{event.preventDefault();const name=$('characterName').value.trim();if(!name)return;const profiles=JSON.parse(localStorage.getItem('zzz-profiles')||'{}');profiles[name]=buildState();localStorage.setItem('zzz-profiles',JSON.stringify(profiles));refreshProfiles();$('profileSelect').value=name;updateBuildTitle(name);closeSaveDialog();toast(`${name} build saved`)});
-$('profileSelect').addEventListener('change',e=>{if(!e.target.value){updateBuildTitle();return}const profiles=JSON.parse(localStorage.getItem('zzz-profiles')||'{}');loadState(profiles[e.target.value]);updateBuildTitle(e.target.value)});
+$('saveForm').addEventListener('submit',event=>{event.preventDefault();const name=$('characterName').value.trim();if(!name)return;const profiles=JSON.parse(localStorage.getItem('zzz-profiles')||'{}');profiles[name]=buildState();localStorage.setItem('zzz-profiles',JSON.stringify(profiles));refreshProfiles();$('profileSelect').value=name;closeSaveDialog();toast(`${name} build saved`)});
+$('profileSelect').addEventListener('change',e=>{if(!e.target.value)return;const profiles=JSON.parse(localStorage.getItem('zzz-profiles')||'{}');loadState(profiles[e.target.value])});
 $('resetButton').addEventListener('click',()=>{if(confirm('Reset this planner?'))location.reload()}); refreshProfiles(); calculate();
