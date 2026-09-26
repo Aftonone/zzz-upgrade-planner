@@ -12,7 +12,8 @@
   <header class="topbar">
     <a class="brand" href="#"><span class="brand-mark">✦</span><span>ZZZ <b>Planner</b></span></a>
     <div class="topbar-actions">
-      <label class="profile-picker">Saved build
+      <button class="button button-ghost" id="notesButton" type="button" aria-haspopup="dialog" aria-controls="notesDialog">Planner notes</button>
+      <label class="profile-picker" aria-label="Saved build">
         <select id="profileSelect"><option value="">No saved builds</option></select>
       </label>
       <button class="button button-ghost" id="saveButton">Save build</button>
@@ -41,7 +42,7 @@
 
         <article class="card section-card">
           <div class="section-heading"><div><span class="section-number">03</span><img class="section-icon" src="./assets/icons/Icon_Core_Skill.webp" alt=""><h2>Core Skills</h2></div></div>
-          <p class="muted">Core nodes unlock in order. Choose the last node you want to complete.</p>
+          <p class="muted">Core nodes unlock in order. Choose the last node you want to complete; the Agent Level target will meet its level requirement.</p>
           <div class="core-picker">
             <div class="core-picker-status"><span>Level through</span><strong id="coreTargetLabel">Skip</strong></div>
             <input id="coreTarget" class="core-slider" type="range" min="0" max="6" value="0" step="1" aria-label="Core skill level target">
@@ -53,7 +54,7 @@
 
         <article class="card section-card">
           <div class="section-heading"><div><span class="section-number">04</span><h2>W-Engine</h2></div><label class="switch-label"><input id="engineEnabled" type="checkbox" checked><span class="switch"></span> Include</label></div>
-          <p class="muted">W-Engines start at level 0. Turn this off when yours is already complete.</p>
+          <p class="muted">Toggle off if you already have a W-Engine. </p>
           <div class="level-row">
             <label>Current level <input id="engineCurrent" type="number" min="0" max="60" value="0"></label>
             <span class="arrow">→</span>
@@ -74,21 +75,26 @@
 
       <aside class="summary-column">
         <div class="card energy-card">
-          <div class="summary-top"><div><p class="eyebrow">FARMING TIMELINE</p><h2>Estimated time</h2></div><span class="live-dot">320 / DAY</span></div>
+          <div class="summary-top"><h2>Estimated time</h2></div>
           <div class="energy-days"><strong id="daysEstimate">0–0 days</strong><span id="energyEstimate">0–0 energy</span></div>
-          <p class="energy-note" id="energyNote">Dennys are excluded from the timeline. Estimate is based on material farming and weekly S-rank core rewards.</p>
         </div>
         <div class="card summary-card">
           <div class="summary-top"><div><p class="eyebrow">LIST</p><h2>Materials Needed</h2></div><span class="live-dot">LIVE</span></div>
-          <div class="denny-total"><span class="denny-label"><img class="denny-icon" src="./assets/materials/Item_Denny.webp" alt="">Dennys</span><strong id="dennyTotal">0</strong></div>
+          <label class="inventory-toggle"><input id="trackInventory" type="checkbox"><span class="switch"></span> Manage Inventory</label>
+          <p class="inventory-hint" id="inventoryHint" hidden>Check a box to mark a resource as fully covered.</p>
           <div class="material-list" id="materialList"></div>
           <div class="empty-state" id="emptyState">Set a target above to see your materials.</div>
         </div>
-        <div class="card notes-card"><h3>Planner notes</h3><ul><li>Counts are rounded up to whole materials.</li><li>Ascension materials are included at each required threshold.</li><li>Saved builds stay in this browser only.</li></ul></div>
       </aside>
     </section>
   </main>
-  <footer class="site-footer"><span>This is an open-source, fan-made, non-commercial project. Copyright for the icons and system:</span><span>© All rights reserved by miHoYo. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Zenless Zone Zero belong to their respective owners.</span></footer>
+  <footer class="site-footer"><span>This is an open-source, fan-made, non-commercial project by Aftonone</span><span>© All rights reserved by miHoYo. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Zenless Zone Zero belong to their respective owners.</span></footer>
+  <div class="save-dialog-backdrop" id="notesDialog" hidden>
+    <section class="notes-dialog card" role="dialog" aria-modal="true" aria-labelledby="notesTitle">
+      <div class="summary-top"><div><p class="eyebrow">REFERENCE</p><h2 id="notesTitle">Planner notes</h2></div><button class="dialog-close" id="closeNotesButton" type="button" aria-label="Close planner notes">×</button></div>
+      <ul class="notes-list"><li>Farming estimates assume 320 energy per day.</li><li>Counts are rounded up to whole materials.</li><li>Ascension materials are included at each required threshold.</li><li>Saved builds stay in this browser only.</li><li id="energyNote">Estimated time includes material and Denny farming; manually managed inventory is deducted.</li></ul>
+    </section>
+  </div>
   <div class="save-dialog-backdrop" id="saveDialog" hidden>
     <form class="save-dialog card" id="saveForm">
       <div class="summary-top"><div><p class="eyebrow">SAVE BUILD</p><h2>Choose a character</h2></div><button class="dialog-close" id="cancelSaveButton" type="button" aria-label="Close save dialog">×</button></div>
